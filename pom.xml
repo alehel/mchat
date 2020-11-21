@@ -41,7 +41,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>io.aleksander.App</mainClass>
+                    <mainClass>io.aleksander.mchat.controller.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>

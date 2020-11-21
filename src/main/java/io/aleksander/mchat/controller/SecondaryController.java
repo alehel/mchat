@@ -1,4 +1,4 @@
-package io.aleksander;
+package io.aleksander.mchat.controller;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
