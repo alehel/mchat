@@ -16,6 +16,8 @@
         <slf4j.version>1.7.30</slf4j.version>
         <junit.version>5.7.0</junit.version>
         <archunit.version>0.14.1</archunit.version>
+        <phaoclient.version>1.2.5</phaoclient.version>
+        <apachecommons.version>3.11</apachecommons.version>
 
         <!-- SonarCloud properties -->
         <sonar.projectKey>alehel_mchat</sonar.projectKey>
@@ -36,6 +38,15 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- ## LOMBOK ## -->
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- ## LOGGING ## -->
@@ -67,6 +78,23 @@
             <version>${slf4j.version}</version>
         </dependency>
 
+        <!-- ## MESSAGE SERVICES ## -->
+        <!-- https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3 -->
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+            <version>${phaoclient.version}</version>
+        </dependency>
+
+        <!-- ## UTIL LIBRARIES ## -->
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apachecommons.version}</version>
+        </dependency>
+
+
         <!-- ## TEST ## -->
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
         <dependency>
@@ -84,6 +112,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -92,6 +121,11 @@
                 <version>3.8.0</version>
                 <configuration>
                     <release>${java.version}</release>
+                    <source>15</source>
+                    <target>15</target>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -100,6 +134,9 @@
                 <version>0.0.4</version>
                 <configuration>
                     <mainClass>io.aleksander.mchat.controller.App</mainClass>
+                    <options>
+                        <option>--enable-preview</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>
