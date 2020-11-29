@@ -1,6 +1,6 @@
 package io.aleksander.mchat.controller;
 
-import io.aleksander.mchat.messageservice.MessageService;
+import io.aleksander.mchat.messageservice.AbstractMessageService;
 import io.aleksander.mchat.messageservice.mqtt3.MqttMessageService;
 import io.aleksander.mchat.model.Message;
 import javafx.fxml.FXML;
@@ -15,7 +15,7 @@ public class PrimaryController {
     @FXML
     TextArea messagesTextArea;
 
-    MessageService mqttService = new MqttMessageService("tcp://mqtt.eclipse.org:1883");
+    AbstractMessageService mqttService = new MqttMessageService("tcp://mqtt.eclipse.org:1883", "TEST_TOPIC");
 
 
     public PrimaryController() {

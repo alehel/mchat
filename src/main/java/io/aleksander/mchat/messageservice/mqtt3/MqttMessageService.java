@@ -1,9 +1,11 @@
 package io.aleksander.mchat.messageservice.mqtt3;
 
-import io.aleksander.mchat.messageservice.MessageService;
+import io.aleksander.mchat.messageservice.AbstractMessageService;
 import io.aleksander.mchat.model.Message;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -12,20 +14,38 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 @Slf4j
-public class MqttMessageService extends MessageService {
+public class MqttMessageService extends AbstractMessageService {
   private IMqttClient mqttClient;
-  private static final String TOPIC = "MCHAT TEST CHANNEL";
+  @Getter
+  private String topic;
+  @Getter
+  private String serverUrl;
 
-  public MqttMessageService(String serverUrl) {
-    if(serverUrl == null) {
-      throw new IllegalArgumentException("serverUrl can not be null!");
-    }
+  public MqttMessageService(String serverUrl, String topic) {
+    verifyAndSetServerUrl(serverUrl);
+    verifyAndSetTopic(topic);
 
     try {
       mqttClient = new MqttClient(serverUrl, getClientId(), new MemoryPersistence());
     } catch (MqttException e) {
       log.warn("Failed to instantiate MqttClient.");
     }
+  }
+
+  private void verifyAndSetServerUrl(String serverUrl) {
+    if(serverUrl == null) {
+      throw new IllegalArgumentException("serverUrl can not be null!");
+    }
+
+    this.serverUrl = serverUrl;
+  }
+
+  private void verifyAndSetTopic(String topic) {
+    if(StringUtils.isEmpty(topic)) {
+      throw new IllegalArgumentException("Topic must be specified.");
+    }
+
+    this.topic = topic;
   }
 
   @Override
@@ -37,7 +57,7 @@ public class MqttMessageService extends MessageService {
       options.setConnectionTimeout(10);
       try {
         mqttClient.connect(options);
-        mqttClient.subscribe(TOPIC, (topic, payload) -> {
+        mqttClient.subscribe(topic, (payloadTopic, payload) -> {
           Message message = SerializationUtils.deserialize(payload.getPayload());
           handleMessageReceived(message);
         });
@@ -55,7 +75,7 @@ public class MqttMessageService extends MessageService {
     byte[] payload = SerializationUtils.serialize(message);
     MqttMessage mqttMessage = new MqttMessage(payload);
     try {
-      mqttClient.publish(TOPIC, mqttMessage);
+      mqttClient.publish(topic, mqttMessage);
     } catch (MqttException e) {
       log.warn("Failed to send message.");
     }
