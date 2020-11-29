@@ -21,4 +21,13 @@ class AbstractMessageServiceTest {
     Assertions.assertThrows(NullPointerException.class, () -> abstractMessageService.addMessageReceivedListener(null));
   }
 
+  @Test
+  void messageReceivedListenerCanNotBeDuplicate() {
+    AbstractMessageService abstractMessageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageReceivedListener listener = message -> {};
+    abstractMessageService.addMessageReceivedListener(listener);
+    Assertions.assertThrows(IllegalArgumentException.class, () ->
+        abstractMessageService.addMessageReceivedListener(listener));
+  }
+
 }
