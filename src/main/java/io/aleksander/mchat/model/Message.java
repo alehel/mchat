@@ -1,7 +1,13 @@
 package io.aleksander.mchat.model;
 
+import java.util.Objects;
 import java.io.Serializable;
 
-@SuppressWarnings("squid:S1128")
 public record Message(String uuid, String sender, String content, String timestamp) implements Serializable {
+  public Message {
+    Objects.requireNonNull(uuid);
+    Objects.requireNonNull(sender);
+    Objects.requireNonNull(content);
+    Objects.requireNonNull(timestamp);
+  }
 }
