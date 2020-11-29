@@ -1,7 +1,7 @@
 package io.aleksander.mchat.model;
 
-import java.util.Objects;
-import java.io.Serializable;
+import java.util.Objects; //NOSONAR
+import java.io.Serializable; //NOSONAR
 
 public record Message(String uuid, String sender, String content, String timestamp) implements Serializable {
   public Message {
