@@ -1,0 +1,7 @@
+#messageLogScrollPane {
+    -fx-background: white;
+}
+
+#messageLog {
+    -fx-background-color: white;
+}
