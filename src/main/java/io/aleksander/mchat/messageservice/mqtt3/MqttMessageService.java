@@ -2,6 +2,7 @@ package io.aleksander.mchat.messageservice.mqtt3;
 
 import io.aleksander.mchat.messageservice.AbstractMessageService;
 import io.aleksander.mchat.model.Message;
+import io.aleksander.mchat.model.MessageType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SerializationUtils;
@@ -71,7 +72,7 @@ public class MqttMessageService extends AbstractMessageService {
 
   @Override
   public void sendMessage(String messageContent) {
-    Message message = new Message(getClientId(), "Aleksander", messageContent, "");
+    Message message = new Message(MessageType.USER_MESSAGEG, getClientId(), "Aleksander", messageContent, "");
     byte[] payload = SerializationUtils.serialize(message);
     MqttMessage mqttMessage = new MqttMessage(payload);
     try {
