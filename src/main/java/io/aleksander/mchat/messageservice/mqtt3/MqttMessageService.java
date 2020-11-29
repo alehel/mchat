@@ -17,6 +17,10 @@ public class MqttMessageService extends MessageService {
   private static final String TOPIC = "MCHAT TEST CHANNEL";
 
   public MqttMessageService(String serverUrl) {
+    if(serverUrl == null) {
+      throw new IllegalArgumentException("serverUrl can not be null!");
+    }
+
     try {
       mqttClient = new MqttClient(serverUrl, getClientId(), new MemoryPersistence());
     } catch (MqttException e) {
