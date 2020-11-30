@@ -26,7 +26,13 @@ public class PrimaryController {
   public PrimaryController() {
     mqttService.addMessageReceivedListener(this::handleMessage);
     mqttService.connect();
-    Platform.runLater(() -> webEngine = chatWebView.getEngine());
+    Platform.runLater(
+        () -> {
+          webEngine = chatWebView.getEngine();
+          webEngine.setUserStyleSheetLocation(
+              getClass().getResource("/io/aleksander/mchat/styles/theme_light.css").toString());
+          chatWebView.setContextMenuEnabled(false);
+        });
   }
 
   private void handleMessage(Message message) {

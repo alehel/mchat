@@ -10,9 +10,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
-<BorderPane prefHeight="374.0" prefWidth="574.0" xmlns="http://javafx.com/javafx/11.0.1"
-  xmlns:fx="http://javafx.com/fxml/1"
-  fx:controller="io.aleksander.mchat.controller.PrimaryController">
+
+<BorderPane prefHeight="374.0" prefWidth="574.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.aleksander.mchat.controller.PrimaryController">
 <stylesheets>
         <URL value="@stylesheet.css" />
     </stylesheets>
@@ -26,7 +25,7 @@
             </ToolBar>
             <ListView VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin></ListView>
          </children>
          <BorderPane.margin>
@@ -50,7 +49,7 @@
         <Button minWidth="60.0" onAction="#sendMessage" text="Send" />
       </items>
       <BorderPane.margin>
-        <Insets bottom="10.0" left="10.0" right="10.0" />
+        <Insets bottom="5.0" left="5.0" right="5.0" />
       </BorderPane.margin>
     </SplitPane>
   </bottom>
