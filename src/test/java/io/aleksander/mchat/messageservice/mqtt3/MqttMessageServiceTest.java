@@ -26,27 +26,21 @@ class MqttMessageServiceTest {
   void serverUrlCannotBeNull() {
     Assertions.assertThrows(
         IllegalArgumentException.class,
-        () -> {
-          new MqttMessageService(null, VALID_TOPIC_NAME);
-        });
+        () -> new MqttMessageService(null, VALID_TOPIC_NAME));
   }
 
   @Test
   void chatTopicCannotBeNull() {
     Assertions.assertThrows(
         IllegalArgumentException.class,
-        () -> {
-          new MqttMessageService("a url", null);
-        });
+        () -> new MqttMessageService("a url", null));
   }
 
   @Test
   void chatTopicCannotBeEmpty() {
     Assertions.assertThrows(
         IllegalArgumentException.class,
-        () -> {
-          new MqttMessageService("a url", "");
-        });
+        () -> new MqttMessageService("a url", ""));
   }
 
   @Test
