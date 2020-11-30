@@ -1,17 +1,21 @@
 package io.aleksander.mchat.messageservice;
 
 import io.aleksander.mchat.model.Message;
-import lombok.Getter;
-import lombok.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.Getter;
+import lombok.NonNull;
 
-public abstract class AbstractMessageService {
+public abstract class MessageService {
+
   private final List<MessageReceivedListener> messageReceivedListeners = new ArrayList<>();
-  @Getter
-  private final String clientId = UUID.randomUUID().toString();
+  @Getter private final String clientId = UUID.randomUUID().toString();
+  @Getter private final MessageServiceType messageServiceType;
+
+  public MessageService(MessageServiceType messageServiceType) {
+    this.messageServiceType = messageServiceType;
+  }
 
   public abstract void connect();
 
@@ -23,11 +27,10 @@ public abstract class AbstractMessageService {
     }
 
     messageReceivedListeners.add(messageReceivedListener);
-
   }
 
   protected void handleMessageReceived(Message message) {
-    messageReceivedListeners.forEach(messageReceivedListener -> messageReceivedListener.onMessageReceived(message));
+    messageReceivedListeners.forEach(
+        messageReceivedListener -> messageReceivedListener.onMessageReceived(message));
   }
-
 }
