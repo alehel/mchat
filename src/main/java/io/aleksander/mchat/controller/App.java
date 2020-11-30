@@ -19,6 +19,7 @@ public class App extends Application {
         new FXMLLoader(App.class.getResource("/io/aleksander/mchat/view/primary.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), 640, 480);
     stage.setScene(scene);
+    stage.setTitle("mchat");
     stage.setOnCloseRequest(
         e -> {
           Platform.exit();
