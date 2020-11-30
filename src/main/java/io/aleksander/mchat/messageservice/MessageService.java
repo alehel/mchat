@@ -13,7 +13,7 @@ public abstract class MessageService {
   @Getter private final String clientId = UUID.randomUUID().toString();
   @Getter private final MessageServiceType messageServiceType;
 
-  public MessageService(MessageServiceType messageServiceType) {
+  protected MessageService(MessageServiceType messageServiceType) {
     this.messageServiceType = messageServiceType;
   }
 
