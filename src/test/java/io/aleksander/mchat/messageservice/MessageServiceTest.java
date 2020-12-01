@@ -89,4 +89,10 @@ class MessageServiceTest {
         IllegalArgumentException.class,
         () -> messageService.removeMessageReceivedListener(messageReceivedListener));
   }
+
+  @Test
+  void noExceptionIfListOfListenersIsEmptyWhenMessageIsHandled() {
+    MessageService messageService = new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    Assertions.assertDoesNotThrow(() -> messageService.handleMessageReceived(VALID_MESSAGE));
+  }
 }

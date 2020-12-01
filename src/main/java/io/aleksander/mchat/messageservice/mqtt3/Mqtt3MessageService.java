@@ -90,4 +90,9 @@ public class Mqtt3MessageService extends MessageService {
       throw new IllegalStateException("Can not send message without an active connection.");
     }
   }
+
+  @Override
+  public boolean isConnected() {
+    return mqttClient.isConnected();
+  }
 }

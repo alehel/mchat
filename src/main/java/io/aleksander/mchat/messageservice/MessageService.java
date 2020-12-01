@@ -41,4 +41,6 @@ public abstract class MessageService {
 
     messageReceivedListeners.remove(messageReceivedListener);
   }
+
+  public abstract boolean isConnected();
 }

@@ -8,6 +8,7 @@ import io.aleksander.mchat.messageservice.MessageServiceType;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class Mqtt3MessageServiceTest {
   @Test
@@ -69,5 +70,31 @@ class Mqtt3MessageServiceTest {
     Mqtt3MessageService mqtt3MessageService =
         new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     Assertions.assertEquals(MessageServiceType.MQQT3, mqtt3MessageService.getMessageServiceType());
+  }
+
+  @Test
+  void isConnected_returnsTrueIfMqttClientIsConnected() {
+    MqttClient client = Mockito.mock(MqttClient.class);
+    Mqtt3MessageService mqtt3MessageService = new Mqtt3MessageService(client, VALID_TOPIC_NAME);
+    Mockito.when(client.getCurrentServerURI()).thenReturn(VALID_MQTT_BROKER_URL);
+    Mockito.when(client.isConnected()).thenReturn(true);
+
+    boolean isConnected = mqtt3MessageService.isConnected();
+
+    Mockito.verify(client).isConnected();
+    Assertions.assertTrue(isConnected);
+  }
+
+  @Test
+  void isConnected_returnsFalseifMqttClientIsNotConnected() {
+    MqttClient client = Mockito.mock(MqttClient.class);
+    Mqtt3MessageService mqtt3MessageService = new Mqtt3MessageService(client, VALID_TOPIC_NAME);
+    Mockito.when(client.getCurrentServerURI()).thenReturn(VALID_MQTT_BROKER_URL);
+    Mockito.when(client.isConnected()).thenReturn(false);
+
+    boolean isConnected = mqtt3MessageService.isConnected();
+
+    Mockito.verify(client).isConnected();
+    Assertions.assertFalse(isConnected);
   }
 }
