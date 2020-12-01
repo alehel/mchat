@@ -19,7 +19,7 @@ public class MqttMessageService extends MessageService {
 
   private IMqttClient mqttClient;
   @Getter private String chatRoom;
-  @Getter private String serverUrl;
+  @Getter private final String serverUrl;
 
   public MqttMessageService(@NonNull String serverUrl, @NonNull String chatRoom) {
     super(MessageServiceType.MQQT3);
@@ -52,7 +52,7 @@ public class MqttMessageService extends MessageService {
   public void connect() {
     if (!mqttClient.isConnected()) {
       try {
-        mqttClient.connect(getConnectionSettings());
+        mqttClient.connect(getDefaultConnectionSettings());
         mqttClient.subscribe(
             chatRoom,
             (payloadTopic, payload) -> {
@@ -63,10 +63,12 @@ public class MqttMessageService extends MessageService {
       } catch (MqttException e) {
         log.warn("Error connecting.");
       }
+    } else {
+      log.info("Client already connected.");
     }
   }
 
-  private MqttConnectOptions getConnectionSettings() {
+  private MqttConnectOptions getDefaultConnectionSettings() {
     MqttConnectOptions options = new MqttConnectOptions();
     options.setAutomaticReconnect(true);
     options.setCleanSession(true);

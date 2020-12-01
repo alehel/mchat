@@ -1,13 +1,16 @@
 package io.aleksander.mchat.messageservice;
 
+import static io.aleksander.mchat.TestUtil.VALID_MESSAGE;
+import static io.aleksander.mchat.TestUtil.VALID_MQTT_BROKER_URL;
+import static io.aleksander.mchat.TestUtil.VALID_TOPIC_NAME;
+import static org.mockito.Mockito.never;
+
 import io.aleksander.mchat.messageservice.mqtt3.MqttMessageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class MessageServiceTest {
-
-  private static final String VALID_MQTT_BROKER_URL = "tcp://mqtt.eclipse.org:1883";
-  private static final String VALID_TOPIC_NAME = "VALID_TOPIC_NAME";
 
   @Test
   void differentMessageServicesGetDifferentClientIds() {
@@ -35,8 +38,55 @@ class MessageServiceTest {
   }
 
   @Test
-  void messageServiceTypeIsSet() {
+  void messageServiceTypeIsSetByConstructor() {
     MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     Assertions.assertNotNull(messageService.getMessageServiceType());
+  }
+
+  @Test
+  void subscribedMessageReceivedListenerReceivesMessage() {
+    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageReceivedListener messageReceivedListener = Mockito.mock(MessageReceivedListener.class);
+    messageService.addMessageReceivedListener(messageReceivedListener);
+    messageService.handleMessageReceived(VALID_MESSAGE);
+
+    Mockito.verify(messageReceivedListener).onMessageReceived(VALID_MESSAGE);
+  }
+
+  @Test
+  void multipleSubscribedListenersAllReceiveMessage() {
+    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageReceivedListener messageReceivedListenerA = Mockito.mock(MessageReceivedListener.class);
+    MessageReceivedListener messageReceivedListenerB = Mockito.mock(MessageReceivedListener.class);
+    messageService.addMessageReceivedListener(messageReceivedListenerA);
+    messageService.addMessageReceivedListener(messageReceivedListenerB);
+    messageService.handleMessageReceived(VALID_MESSAGE);
+
+    Mockito.verify(messageReceivedListenerA).onMessageReceived(VALID_MESSAGE);
+    Mockito.verify(messageReceivedListenerB).onMessageReceived(VALID_MESSAGE);
+  }
+
+  @Test
+  void unsubscribedListenerDoesNotReceiveMessage() {
+    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageReceivedListener messageReceivedListenerA = Mockito.mock(MessageReceivedListener.class);
+    MessageReceivedListener messageReceivedListenerB = Mockito.mock(MessageReceivedListener.class);
+    messageService.addMessageReceivedListener(messageReceivedListenerA);
+    messageService.addMessageReceivedListener(messageReceivedListenerB);
+    messageService.removeMessageReceivedListener(messageReceivedListenerA);
+    messageService.handleMessageReceived(VALID_MESSAGE);
+
+    Mockito.verify(messageReceivedListenerA, never()).onMessageReceived(VALID_MESSAGE);
+    Mockito.verify(messageReceivedListenerB).onMessageReceived(VALID_MESSAGE);
+  }
+
+  @Test
+  void canNotRemoveListenerWhichWasNotAttached() {
+    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageReceivedListener messageReceivedListener = Mockito.mock(MessageReceivedListener.class);
+
+    Assertions.assertThrows(
+        IllegalArgumentException.class,
+        () -> messageService.removeMessageReceivedListener(messageReceivedListener));
   }
 }

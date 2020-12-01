@@ -33,4 +33,12 @@ public abstract class MessageService {
     messageReceivedListeners.forEach(
         messageReceivedListener -> messageReceivedListener.onMessageReceived(message));
   }
+
+  public void removeMessageReceivedListener(MessageReceivedListener messageReceivedListener) {
+    if (!messageReceivedListeners.contains(messageReceivedListener)) {
+      throw new IllegalArgumentException("Specified MessageReceivedListener was not registered.");
+    }
+
+    messageReceivedListeners.remove(messageReceivedListener);
+  }
 }
