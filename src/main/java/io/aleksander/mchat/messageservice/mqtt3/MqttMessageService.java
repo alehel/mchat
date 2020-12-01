@@ -76,12 +76,16 @@ public class MqttMessageService extends MessageService {
 
   @Override
   public void sendMessage(@NonNull Message message) {
-    byte[] payload = SerializationUtils.serialize(message);
-    MqttMessage mqttMessage = new MqttMessage(payload);
-    try {
-      mqttClient.publish(chatRoom, mqttMessage);
-    } catch (MqttException e) {
-      log.warn("Failed to send message.");
+    if (mqttClient.isConnected()) {
+      byte[] payload = SerializationUtils.serialize(message);
+      MqttMessage mqttMessage = new MqttMessage(payload);
+      try {
+        mqttClient.publish(chatRoom, mqttMessage);
+      } catch (MqttException e) {
+        log.warn("Failed to send message.");
+      }
+    } else {
+      throw new IllegalStateException("Can not send message without an active connection.");
     }
   }
 }
