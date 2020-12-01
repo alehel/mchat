@@ -15,13 +15,13 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 @Slf4j
-public class MqttMessageService extends MessageService {
+public class Mqtt3MessageService extends MessageService {
 
   private IMqttClient mqttClient;
   @Getter private String chatRoom;
   @Getter private final String serverUrl;
 
-  public MqttMessageService(@NonNull String serverUrl, @NonNull String chatRoom) {
+  public Mqtt3MessageService(@NonNull String serverUrl, @NonNull String chatRoom) {
     super(MessageServiceType.MQQT3);
     this.serverUrl = serverUrl;
     validateAndSetTopic(chatRoom);
@@ -33,7 +33,7 @@ public class MqttMessageService extends MessageService {
     }
   }
 
-  protected MqttMessageService(@NonNull MqttClient mqttClient, @NonNull String chatRoom) {
+  protected Mqtt3MessageService(@NonNull MqttClient mqttClient, @NonNull String chatRoom) {
     super(MessageServiceType.MQQT3);
     this.mqttClient = mqttClient;
     this.serverUrl = mqttClient.getCurrentServerURI();

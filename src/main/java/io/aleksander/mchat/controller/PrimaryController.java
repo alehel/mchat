@@ -1,7 +1,7 @@
 package io.aleksander.mchat.controller;
 
 import io.aleksander.mchat.messageservice.MessageService;
-import io.aleksander.mchat.messageservice.mqtt3.MqttMessageService;
+import io.aleksander.mchat.messageservice.mqtt3.Mqtt3MessageService;
 import io.aleksander.mchat.model.Message;
 import io.aleksander.mchat.model.MessageType;
 import io.aleksander.mchat.templateengine.ChatTemplateEngine;
@@ -22,7 +22,7 @@ public class PrimaryController {
   @FXML TextField messageTextField;
   @FXML WebView chatWebView;
   WebEngine webEngine;
-  MessageService messageService = new MqttMessageService("tcp://mqtt.eclipse.org:1883", "TEST_TOPIC");
+  MessageService messageService = new Mqtt3MessageService("tcp://mqtt.eclipse.org:1883", "TEST_TOPIC");
 
   public PrimaryController() {
     messageService.addMessageReceivedListener(this::handleMessage);

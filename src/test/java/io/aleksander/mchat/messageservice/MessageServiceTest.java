@@ -5,7 +5,7 @@ import static io.aleksander.mchat.TestUtil.VALID_MQTT_BROKER_URL;
 import static io.aleksander.mchat.TestUtil.VALID_TOPIC_NAME;
 import static org.mockito.Mockito.never;
 
-import io.aleksander.mchat.messageservice.mqtt3.MqttMessageService;
+import io.aleksander.mchat.messageservice.mqtt3.Mqtt3MessageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,22 +15,22 @@ class MessageServiceTest {
   @Test
   void differentMessageServicesGetDifferentClientIds() {
     MessageService messageService1 =
-        new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+        new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     MessageService messageService2 =
-        new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+        new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     Assertions.assertNotEquals(messageService1.getClientId(), messageService2.getClientId());
   }
 
   @Test
   void messageReceivedListenerCanNotBeNull() {
-    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageService messageService = new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     Assertions.assertThrows(
         NullPointerException.class, () -> messageService.addMessageReceivedListener(null));
   }
 
   @Test
   void messageReceivedListenerCanNotBeDuplicate() {
-    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageService messageService = new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     MessageReceivedListener listener = message -> {};
     messageService.addMessageReceivedListener(listener);
     Assertions.assertThrows(
@@ -39,13 +39,13 @@ class MessageServiceTest {
 
   @Test
   void messageServiceTypeIsSetByConstructor() {
-    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageService messageService = new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     Assertions.assertNotNull(messageService.getMessageServiceType());
   }
 
   @Test
   void subscribedMessageReceivedListenerReceivesMessage() {
-    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageService messageService = new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     MessageReceivedListener messageReceivedListener = Mockito.mock(MessageReceivedListener.class);
     messageService.addMessageReceivedListener(messageReceivedListener);
     messageService.handleMessageReceived(VALID_MESSAGE);
@@ -55,7 +55,7 @@ class MessageServiceTest {
 
   @Test
   void multipleSubscribedListenersAllReceiveMessage() {
-    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageService messageService = new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     MessageReceivedListener messageReceivedListenerA = Mockito.mock(MessageReceivedListener.class);
     MessageReceivedListener messageReceivedListenerB = Mockito.mock(MessageReceivedListener.class);
     messageService.addMessageReceivedListener(messageReceivedListenerA);
@@ -68,7 +68,7 @@ class MessageServiceTest {
 
   @Test
   void unsubscribedListenerDoesNotReceiveMessage() {
-    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageService messageService = new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     MessageReceivedListener messageReceivedListenerA = Mockito.mock(MessageReceivedListener.class);
     MessageReceivedListener messageReceivedListenerB = Mockito.mock(MessageReceivedListener.class);
     messageService.addMessageReceivedListener(messageReceivedListenerA);
@@ -82,7 +82,7 @@ class MessageServiceTest {
 
   @Test
   void canNotRemoveListenerWhichWasNotAttached() {
-    MessageService messageService = new MqttMessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
+    MessageService messageService = new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     MessageReceivedListener messageReceivedListener = Mockito.mock(MessageReceivedListener.class);
 
     Assertions.assertThrows(
