@@ -19,7 +19,7 @@ public abstract class MessageService {
 
   public abstract void connect();
 
-  public abstract void sendMessage(String message);
+  public abstract void sendMessage(Message message);
 
   public void addMessageReceivedListener(@NonNull MessageReceivedListener messageReceivedListener) {
     if (messageReceivedListeners.contains(messageReceivedListener)) {

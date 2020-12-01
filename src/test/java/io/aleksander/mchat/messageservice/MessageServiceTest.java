@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 class MessageServiceTest {
 
-  private static final String VALID_MQTT_BROKER_URL = "tcp://mqtt.eclipse" + ".org:1883";
+  private static final String VALID_MQTT_BROKER_URL = "tcp://mqtt.eclipse.org:1883";
   private static final String VALID_TOPIC_NAME = "VALID_TOPIC_NAME";
 
   @Test
