@@ -33,7 +33,7 @@ public class MqttMessageService extends MessageService {
     }
   }
 
-  public MqttMessageService(@NonNull MqttClient mqttClient, @NonNull String chatRoom) {
+  protected MqttMessageService(@NonNull MqttClient mqttClient, @NonNull String chatRoom) {
     super(MessageServiceType.MQQT3);
     this.mqttClient = mqttClient;
     this.serverUrl = mqttClient.getCurrentServerURI();
