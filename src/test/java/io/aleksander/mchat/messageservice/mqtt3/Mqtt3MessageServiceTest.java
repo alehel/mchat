@@ -3,9 +3,13 @@ package io.aleksander.mchat.messageservice.mqtt3;
 import static io.aleksander.mchat.TestUtil.VALID_MESSAGE;
 import static io.aleksander.mchat.TestUtil.VALID_MQTT_BROKER_URL;
 import static io.aleksander.mchat.TestUtil.VALID_TOPIC_NAME;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 
 import io.aleksander.mchat.messageservice.MessageServiceType;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -54,7 +58,8 @@ class Mqtt3MessageServiceTest {
   void messageCanNotBeNull() {
     Mqtt3MessageService mqtt3MessageService =
         new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
-    Assertions.assertThrows(NullPointerException.class, () -> mqtt3MessageService.sendMessage(null));
+    Assertions.assertThrows(
+        NullPointerException.class, () -> mqtt3MessageService.sendMessage(null));
   }
 
   @Test
@@ -66,7 +71,7 @@ class Mqtt3MessageServiceTest {
   }
 
   @Test
-  void messageServiceTypeIsCorrect() {
+  void constructor_messageServiceTypeIsSetCorrect() {
     Mqtt3MessageService mqtt3MessageService =
         new Mqtt3MessageService(VALID_MQTT_BROKER_URL, VALID_TOPIC_NAME);
     Assertions.assertEquals(MessageServiceType.MQQT3, mqtt3MessageService.getMessageServiceType());
@@ -96,5 +101,39 @@ class Mqtt3MessageServiceTest {
 
     Mockito.verify(client).isConnected();
     Assertions.assertFalse(isConnected);
+  }
+
+  @Test
+  void connect_verifysIfClientAlreadyHasAConnection() {
+    MqttClient client = Mockito.mock(MqttClient.class);
+    Mqtt3MessageService mqtt3MessageService = new Mqtt3MessageService(client, VALID_TOPIC_NAME);
+
+    mqtt3MessageService.connect();
+
+    Mockito.verify(client).isConnected();
+  }
+
+  @Test
+  void connect_clientAlreadyConnected_doesNotTryToStartNewConnection() throws MqttException {
+    MqttClient client = Mockito.mock(MqttClient.class);
+    Mockito.when(client.isConnected()).thenReturn(true);
+    Mqtt3MessageService mqtt3MessageService = new Mqtt3MessageService(client, VALID_TOPIC_NAME);
+
+    mqtt3MessageService.connect();
+
+    Mockito.verify(client, never()).connect(any());
+    Mockito.verify(client, never()).subscribe(anyString(), any());
+  }
+
+  @Test
+  void connect_clientNotConnected_attemptsToConnectAndSubscribe() throws MqttException {
+    MqttClient client = Mockito.mock(MqttClient.class);
+    Mockito.when(client.isConnected()).thenReturn(false);
+    Mqtt3MessageService mqtt3MessageService = new Mqtt3MessageService(client, VALID_TOPIC_NAME);
+
+    mqtt3MessageService.connect();
+
+    Mockito.verify(client).connect(any());
+    Mockito.verify(client).subscribe(anyString(), any());
   }
 }
