@@ -20,7 +20,7 @@
          <children>
             <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0">
               <items>
-                <Button mnemonicParsing="false" text="+" />
+                <Button mnemonicParsing="false" onAction="#showNewConnectionScreen" text="+" />
               </items>
             </ToolBar>
             <ListView VBox.vgrow="ALWAYS">
@@ -46,7 +46,7 @@
     <SplitPane dividerPositions="0.5" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER">
       <items>
         <TextField fx:id="messageTextField" onAction="#sendMessage" />
-        <Button minWidth="60.0" onAction="#sendMessage" text="Send" />
+        <Button fx:id="sendButton" minWidth="60.0" onAction="#sendMessage" text="Send" />
       </items>
       <BorderPane.margin>
         <Insets bottom="5.0" left="5.0" right="5.0" />
