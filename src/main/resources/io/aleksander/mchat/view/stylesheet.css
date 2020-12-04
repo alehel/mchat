@@ -5,3 +5,9 @@
 #messageLog {
     -fx-background-color: white;
 }
+
+#settingsPane {
+  -fx-background-color: #d6d6d6;
+  -fx-background-insets: 5;
+  -fx-effect: innershadow(gaussian, black,2,0,0,0);
+}

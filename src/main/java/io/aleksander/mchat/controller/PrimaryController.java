@@ -67,6 +67,10 @@ public class PrimaryController implements MessageReceivedListener {
       stage.setScene(scene);
       stage.setTitle("New Connection");
       stage.initModality(Modality.APPLICATION_MODAL);
+      stage.setHeight(250);
+      stage.setMinHeight(250);
+      stage.setWidth(400);
+      stage.setMinWidth(400);
       stage.showAndWait();
       NewConnectionController controller = fxmlLoader.getController();
       if (controller.btnConnectClicked()) {
