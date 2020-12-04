@@ -3,11 +3,13 @@ package io.aleksander.mchat.messageservice;
 import io.aleksander.mchat.model.Message;
 import io.aleksander.mchat.model.Setting;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -17,6 +19,7 @@ public abstract class MessageService {
   @Getter private final String clientId = UUID.randomUUID().toString();
   @Getter private final MessageServiceType messageServiceType;
   @Getter private final List<Message> chatHistory = new ArrayList<>();
+  @Getter @Setter private Map<String, Setting> settings = new HashMap<>();
 
   protected MessageService(MessageServiceType messageServiceType) {
     this.messageServiceType = messageServiceType;
@@ -51,18 +54,4 @@ public abstract class MessageService {
 
     return true;
   }
-
-  public void removeMessageReceivedListener(MessageReceivedListener messageReceivedListener) {
-    if (!messageReceivedListeners.contains(messageReceivedListener)) {
-      throw new IllegalArgumentException("Specified MessageReceivedListener was not registered.");
-    }
-
-    messageReceivedListeners.remove(messageReceivedListener);
-  }
-
-  public abstract boolean isConnected();
-
-  public abstract Map<String, Setting> getSettings();
-
-  public abstract void setSettings(Map<String, Setting> settings);
 }
