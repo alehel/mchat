@@ -3,10 +3,9 @@ package io.aleksander.mchat.messageservice;
 import io.aleksander.mchat.model.Message;
 import io.aleksander.mchat.model.Setting;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public abstract class MessageService {
   @Getter private final String clientId = UUID.randomUUID().toString();
   @Getter private final MessageServiceType messageServiceType;
   @Getter private final List<Message> chatHistory = new ArrayList<>();
-  @Getter @Setter private Map<String, Setting> settings = new HashMap<>();
+  @Getter @Setter(AccessLevel.PROTECTED) private List<Setting> settings = new ArrayList<>();
 
   protected MessageService(MessageServiceType messageServiceType) {
     this.messageServiceType = messageServiceType;
@@ -45,7 +44,7 @@ public abstract class MessageService {
   }
 
   protected boolean allSettingsAreValid() {
-    for(Setting setting : getSettings().values()) {
+    for(Setting setting : settings) {
       if (!setting.valueIsValid()) {
         log.warn("Value " + setting.getValue() + " not valid for setting " + setting.getId());
         return false;

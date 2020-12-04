@@ -1,7 +1,7 @@
 package io.aleksander.mchat.controller;
 
 import io.aleksander.mchat.model.Setting;
-import java.util.Map;
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,14 +13,14 @@ import javafx.scene.layout.Pane;
  * based on the available/required setting.
  */
 public class ConnectionSettingsGuiBuilder {
-  public Pane buildGuiForSettings(Map<String, Setting> settings) {
+  public Pane buildGuiForSettings(List<Setting> settings) {
     GridPane gridPane = new GridPane();
     gridPane.setHgap(10);
     gridPane.setVgap(5);
     gridPane.setPadding(new Insets(20, 10, 10, 20));
 
     int row = 0;
-    for(Setting setting : settings.values()) {
+    for(Setting setting : settings) {
       Label label = new Label(setting.getName() + ": ");
       gridPane.add(label, 0,row);
       TextField textField = new TextField();

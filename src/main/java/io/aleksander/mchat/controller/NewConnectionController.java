@@ -4,7 +4,6 @@ import io.aleksander.mchat.messageservice.MessageService;
 import io.aleksander.mchat.messageservice.MessageServiceFactory;
 import io.aleksander.mchat.messageservice.MessageServiceType;
 import io.aleksander.mchat.model.Setting;
-import java.util.Map;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,8 +54,7 @@ public class NewConnectionController {
 
   private void mapSettings() {
     if (messageService != null) {
-      Map<String, Setting> settings = messageService.getSettings();
-      for(Setting setting : settings.values()) {
+      for(Setting setting : messageService.getSettings()) {
         Node node = settingsPane.lookup("#" + setting.getId());
         if (node instanceof TextField textField) {
           setting.setValue(textField.getText());
