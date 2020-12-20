@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -24,10 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 public class PrimaryController implements MessageReceivedListener {
 
   private final ChatTemplateEngine chatTemplateEngine = new ChatTemplateEngine();
-  private final List<Message> chatHistory = new ArrayList<>();
   @FXML TextField messageTextField;
   @FXML WebView chatWebView;
   @FXML Button sendButton;
+  @FXML ListView<String> connectionList;
   WebEngine webEngine;
   private final List<MessageService> messageServices = new ArrayList<>();
   MessageService activeMessageService;
@@ -50,7 +51,7 @@ public class PrimaryController implements MessageReceivedListener {
         new Message(
             MessageType.USER_MESSAGE,
             activeMessageService.getClientId(),
-            "Aleksander",
+            activeMessageService.getUserName(),
             messageTextField.getText());
       activeMessageService.sendMessage(message);
       messageTextField.clear();
@@ -77,11 +78,19 @@ public class PrimaryController implements MessageReceivedListener {
         MessageService definedMessageService = controller.getDefinedMessageService();
         messageServices.add(definedMessageService);
         setActiveMessageService(definedMessageService);
+        updateConnectionList();
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
 
+  }
+
+  private void updateConnectionList() {
+    connectionList.getItems().clear();
+    messageServices.forEach(
+        messageService ->
+            connectionList.getItems().add(messageService.getDisplayString()));
   }
 
   private void setActiveMessageService(MessageService definedMessageService) {
@@ -94,8 +103,9 @@ public class PrimaryController implements MessageReceivedListener {
   @Override
   public void onMessageReceived(Message message) {
     log.info(message.toString());
-    chatHistory.add(message);
-    String chatHtml = chatTemplateEngine.generateChatHtml("TEST_TOPIC", chatHistory);
+    String chatHtml =
+        chatTemplateEngine.generateChatHtml(
+            activeMessageService.getDisplayString(), activeMessageService.getChatHistory());
     Platform.runLater(() -> webEngine.loadContent(chatHtml));
   }
 }

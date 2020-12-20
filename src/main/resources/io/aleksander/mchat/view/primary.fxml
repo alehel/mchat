@@ -1,56 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
-<BorderPane prefHeight="374.0" prefWidth="574.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.aleksander.mchat.controller.PrimaryController">
-<stylesheets>
-        <URL value="@stylesheet.css" />
-    </stylesheets>
-   <left>
-      <VBox prefWidth="150.0" BorderPane.alignment="CENTER">
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.aleksander.mchat.controller.PrimaryController">
+   <children>
+      <SplitPane dividerPositions="0.3269230769230769" prefHeight="465.0" prefWidth="686.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <VBox minWidth="150.0" prefWidth="150.0">
+               <children>
+                  <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0">
+                    <items>
+                      <Button mnemonicParsing="false" onAction="#showNewConnectionScreen" text="+" />
+                    </items>
+                  </ToolBar>
+                  <ListView fx:id="connectionList" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ListView>
+               </children>
+            </VBox>
+            <WebView fx:id="chatWebView" prefHeight="-1.0" prefWidth="457.0" />
+         </items>
+      </SplitPane>
+      <HBox layoutY="474.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="686.0" spacing="5.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
          <children>
-            <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0">
-              <items>
-                <Button mnemonicParsing="false" onAction="#showNewConnectionScreen" text="+" />
-              </items>
-            </ToolBar>
-            <ListView VBox.vgrow="ALWAYS">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </VBox.margin></ListView>
-         </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </VBox>
-   </left>
-
-   <center>
-      <WebView fx:id="chatWebView" prefHeight="-1.0" prefWidth="-1.0" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </WebView>
-   </center>
-
-  <bottom>
-    <SplitPane dividerPositions="0.5" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-      <items>
-        <TextField fx:id="messageTextField" onAction="#sendMessage" />
+        <TextField fx:id="messageTextField" onAction="#sendMessage" HBox.hgrow="ALWAYS" />
         <Button fx:id="sendButton" minWidth="60.0" onAction="#sendMessage" text="Send" />
-      </items>
-      <BorderPane.margin>
-        <Insets bottom="5.0" left="5.0" right="5.0" />
-      </BorderPane.margin>
-    </SplitPane>
-  </bottom>
-</BorderPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -28,6 +28,8 @@ public abstract class MessageService {
 
   public abstract void sendMessage(Message message);
 
+  public abstract String getDisplayString();
+
   public void addMessageReceivedListener(@NonNull MessageReceivedListener messageReceivedListener) {
     if (messageReceivedListeners.contains(messageReceivedListener)) {
       throw new IllegalArgumentException("specified MessageReceivedListener is already attached.");
@@ -53,4 +55,6 @@ public abstract class MessageService {
 
     return true;
   }
+
+  public abstract String getUserName();
 }

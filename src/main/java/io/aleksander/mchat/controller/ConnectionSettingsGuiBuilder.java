@@ -22,10 +22,11 @@ public class ConnectionSettingsGuiBuilder {
     int row = 0;
     for(Setting setting : settings) {
       Label label = new Label(setting.getName() + ": ");
-      gridPane.add(label, 0,row);
       TextField textField = new TextField();
       textField.setId(setting.getId());
       textField.setPrefWidth(200);
+      label.setLabelFor(textField);
+      gridPane.add(label, 0,row);
       gridPane.add(textField, 1, row);
       row++;
     }

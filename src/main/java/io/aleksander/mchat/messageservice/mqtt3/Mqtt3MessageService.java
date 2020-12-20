@@ -6,7 +6,6 @@ import io.aleksander.mchat.model.Message;
 import io.aleksander.mchat.model.RequiredFieldValidator;
 import io.aleksander.mchat.model.Setting;
 import java.util.Arrays;
-
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SerializationUtils;
@@ -22,15 +21,18 @@ public class Mqtt3MessageService extends MessageService {
 
   private static final String SETTING_SERVER_URL = "SETTING_SERVER_URL";
   private static final String SETTING_CHAT_ROOM = "SETTING_CHAT_ROOM";
+  private static final String SETTING_USER_NAME = "SETTING_USER_NAME";
   private IMqttClient mqttClient;
   private final Setting serverUrl;
   private final Setting chatRoom;
+  private final Setting userName;
 
   public Mqtt3MessageService() {
     super(MessageServiceType.MQQT3);
     serverUrl = new Setting(SETTING_SERVER_URL, "Server URL", true, new RequiredFieldValidator());
     chatRoom = new Setting(SETTING_CHAT_ROOM, "Chat Room", true, new RequiredFieldValidator());
-    getSettings().addAll(Arrays.asList(serverUrl, chatRoom));
+    userName = new Setting(SETTING_USER_NAME, "User Name", true, new RequiredFieldValidator());
+    getSettings().addAll(Arrays.asList(userName, serverUrl, chatRoom));
   }
 
   @Override
@@ -48,6 +50,11 @@ public class Mqtt3MessageService extends MessageService {
 
   private void connectAndSubscribe() {
     try {
+      log.info(
+          "Attempting to connect to room "
+              + chatRoom.getValue()
+              + " on URL "
+              + serverUrl.getValue());
       mqttClient = new MqttClient(serverUrl.getValue(), getClientId(), new MemoryPersistence());
       mqttClient.connect(getDefaultConnectionSettings());
       mqttClient.subscribe(
@@ -58,7 +65,7 @@ public class Mqtt3MessageService extends MessageService {
           });
       log.info("Connected to chat room.");
     } catch (MqttException e) {
-      log.warn("Error connecting.");
+      log.warn("Error connecting. " + e.getMessage());
     }
   }
 
@@ -83,5 +90,15 @@ public class Mqtt3MessageService extends MessageService {
     } else {
       throw new IllegalStateException("Can not send message without an active connection.");
     }
+  }
+
+  @Override
+  public String getDisplayString() {
+    return serverUrl.getValue() + "\n" + chatRoom.getValue();
+  }
+
+  @Override
+  public String getUserName() {
+    return userName.getValue();
   }
 }
