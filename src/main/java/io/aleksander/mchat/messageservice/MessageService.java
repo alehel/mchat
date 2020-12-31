@@ -30,6 +30,11 @@ public abstract class MessageService {
 
   public abstract String getDisplayString();
 
+  @Override
+  public String toString() {
+    return getDisplayString();
+  }
+
   public void addMessageReceivedListener(@NonNull MessageReceivedListener messageReceivedListener) {
     if (messageReceivedListeners.contains(messageReceivedListener)) {
       throw new IllegalArgumentException("specified MessageReceivedListener is already attached.");

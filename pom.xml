@@ -15,6 +15,7 @@
         <phaoclient.version>1.2.5</phaoclient.version>
         <apachecommons.version>3.11</apachecommons.version>
         <lombok.version>1.18.16</lombok.version>
+        <mapstruct.version>1.4.1.Final</mapstruct.version>
         <mockito.version>3.6.28</mockito.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -121,6 +122,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor -->
+        <!-- Required by lombok -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -136,6 +145,13 @@
                     <compilerArgs>
                         <arg>--enable-preview</arg>
                     </compilerArgs>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
@@ -171,7 +187,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>io.aleksander.mchat.controller.App</mainClass>
+                    <mainClass>io.aleksander.mchat.App</mainClass>
                     <options>
                         <option>--enable-preview</option>
                     </options>

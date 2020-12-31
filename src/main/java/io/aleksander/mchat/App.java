@@ -1,5 +1,6 @@
-package io.aleksander.mchat.controller;
+package io.aleksander.mchat;
 
+import io.aleksander.mchat.controller.ViewResource;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -15,8 +16,7 @@ public class App extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader =
-        new FXMLLoader(App.class.getResource("/io/aleksander/mchat/view/primary.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(ViewResource.PRIMARY_FXML.getPath()));
     Scene scene = new Scene(fxmlLoader.load(), 640, 480);
     stage.setMinWidth(640);
     stage.setMinHeight(480);

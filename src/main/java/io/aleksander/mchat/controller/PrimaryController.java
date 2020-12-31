@@ -1,13 +1,12 @@
 package io.aleksander.mchat.controller;
 
+import io.aleksander.mchat.App;
 import io.aleksander.mchat.messageservice.MessageReceivedListener;
 import io.aleksander.mchat.messageservice.MessageService;
 import io.aleksander.mchat.model.Message;
 import io.aleksander.mchat.model.MessageType;
 import io.aleksander.mchat.templateengine.ChatTemplateEngine;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,9 +27,8 @@ public class PrimaryController implements MessageReceivedListener {
   @FXML TextField messageTextField;
   @FXML WebView chatWebView;
   @FXML Button sendButton;
-  @FXML ListView<String> connectionList;
+  @FXML ListView<MessageService> connectionList;
   WebEngine webEngine;
-  private final List<MessageService> messageServices = new ArrayList<>();
   MessageService activeMessageService;
 
   public PrimaryController() {
@@ -38,9 +36,18 @@ public class PrimaryController implements MessageReceivedListener {
         () -> {
           webEngine = chatWebView.getEngine();
           webEngine.setUserStyleSheetLocation(
-              getClass().getResource("/io/aleksander/mchat/styles/theme_light.css").toString());
+              getClass().getResource(ViewResource.CHAT_THEME_LIGHT_CSS.getPath()).toString());
           chatWebView.setContextMenuEnabled(false);
           sendButton.setDisable(true);
+          connectionList
+              .getSelectionModel()
+              .selectedItemProperty()
+              .addListener(
+                  (observableValue, oldValue, newValue) -> {
+                    if (oldValue != newValue && newValue != null) {
+                      setActiveMessageService(newValue);
+                    }
+                  });
         });
   }
 
@@ -62,7 +69,7 @@ public class PrimaryController implements MessageReceivedListener {
   private void showNewConnectionScreen() {
     try {
       FXMLLoader fxmlLoader =
-          new FXMLLoader(App.class.getResource("/io/aleksander/mchat/view/new_connection.fxml"));
+          new FXMLLoader(App.class.getResource(ViewResource.NEW_CONNECTION_FXML.getPath()));
       Scene scene = new Scene(fxmlLoader.load());
       Stage stage = new Stage();
       stage.setScene(scene);
@@ -76,9 +83,10 @@ public class PrimaryController implements MessageReceivedListener {
       NewConnectionController controller = fxmlLoader.getController();
       if (controller.btnConnectClicked()) {
         MessageService definedMessageService = controller.getDefinedMessageService();
-        messageServices.add(definedMessageService);
+        connectionList.getItems().add(definedMessageService);
         setActiveMessageService(definedMessageService);
-        updateConnectionList();
+        activeMessageService.addMessageReceivedListener(this);
+        activeMessageService.connect();
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -86,18 +94,13 @@ public class PrimaryController implements MessageReceivedListener {
 
   }
 
-  private void updateConnectionList() {
-    connectionList.getItems().clear();
-    messageServices.forEach(
-        messageService ->
-            connectionList.getItems().add(messageService.getDisplayString()));
-  }
-
   private void setActiveMessageService(MessageService definedMessageService) {
     activeMessageService = definedMessageService;
+    String chatHtml =
+        chatTemplateEngine.generateChatHtml(
+            activeMessageService.getDisplayString(), activeMessageService.getChatHistory());
+    Platform.runLater(() -> webEngine.loadContent(chatHtml));
     sendButton.setDisable(false);
-    activeMessageService.addMessageReceivedListener(this);
-    activeMessageService.connect();
   }
 
   @Override
