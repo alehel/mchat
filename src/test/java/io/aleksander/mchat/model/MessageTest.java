@@ -3,27 +3,27 @@ package io.aleksander.mchat.model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class MessageTest {
+public class MessageTest {
 
   @Test
-  void messageTypeMayNotBeNull() {
+  public void messageTypeMayNotBeNull() {
     Assertions.assertThrows(NullPointerException.class, () -> new Message(null, "", "", ""));
   }
 
   @Test
-  void uuidMayNotBeNull() {
+  public void uuidMayNotBeNull() {
     Assertions.assertThrows(
         NullPointerException.class, () -> new Message(MessageType.USER_MESSAGE, null, "", ""));
   }
 
   @Test
-  void senderMayNotBeNull() {
+  public void senderMayNotBeNull() {
     Assertions.assertThrows(
         NullPointerException.class, () -> new Message(MessageType.USER_MESSAGE, "", null, ""));
   }
 
   @Test
-  void contentMayNotBeNull() {
+  public void contentMayNotBeNull() {
     Assertions.assertThrows(
         NullPointerException.class, () -> new Message(MessageType.USER_MESSAGE, "", "", null));
   }

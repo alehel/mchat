@@ -9,10 +9,10 @@ import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class ChatTemplateEngineTest {
+public class ChatTemplateEngineTest {
 
   @Test
-  void generatedHtmlContainsChatRoomAsTitle() {
+  public void generatedHtmlContainsChatRoomAsTitle() {
     ChatTemplateEngine templateEngine = new ChatTemplateEngine();
     Message message =
         new Message(
@@ -26,7 +26,7 @@ class ChatTemplateEngineTest {
   }
 
   @Test
-  void generatedHtmlContainsChatMessageContent() {
+  public void generatedHtmlContainsChatMessageContent() {
     ChatTemplateEngine templateEngine = new ChatTemplateEngine();
     Message message =
         new Message(
