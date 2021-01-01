@@ -29,9 +29,9 @@ public class Mqtt3MessageService extends MessageService {
 
   public Mqtt3MessageService() {
     super(MessageServiceType.MQQT3);
-    serverUrl = new Setting(SETTING_SERVER_URL, "Server URL", true, new RequiredFieldValidator());
-    chatRoom = new Setting(SETTING_CHAT_ROOM, "Chat Room", true, new RequiredFieldValidator());
-    userName = new Setting(SETTING_USER_NAME, "User Name", true, new RequiredFieldValidator());
+    serverUrl = new Setting(SETTING_SERVER_URL, "Server URL", new RequiredFieldValidator());
+    chatRoom = new Setting(SETTING_CHAT_ROOM, "Chat Room", new RequiredFieldValidator());
+    userName = new Setting(SETTING_USER_NAME, "User Name", new RequiredFieldValidator());
     getSettings().addAll(Arrays.asList(userName, serverUrl, chatRoom));
   }
 

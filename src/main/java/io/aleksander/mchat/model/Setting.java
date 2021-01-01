@@ -15,10 +15,6 @@ public class Setting {
   @Getter
   private final String name;
 
-  @NonNull
-  @Getter
-  private final boolean required;
-
   @Getter
   @Setter
   private String value;
