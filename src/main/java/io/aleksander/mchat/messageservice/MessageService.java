@@ -18,13 +18,28 @@ public abstract class MessageService {
   @Getter private final String clientId = UUID.randomUUID().toString();
   @Getter private final MessageServiceType messageServiceType;
   @Getter private final List<Message> chatHistory = new ArrayList<>();
-  @Getter @Setter(AccessLevel.PROTECTED) private List<Setting> settings = new ArrayList<>();
+
+  @Getter
+  @Setter(AccessLevel.PROTECTED)
+  private List<Setting> settings = new ArrayList<>();
 
   protected MessageService(MessageServiceType messageServiceType) {
     this.messageServiceType = messageServiceType;
   }
 
-  public abstract void connect();
+  public void connect() {
+    if (isConnected()) {
+      throw new IllegalStateException("Already connectedt.");
+    }
+
+    if (allSettingsAreValid()) {
+      connectToServer();
+    } else {
+      throw new IllegalStateException("Not all settings are valid.");
+    }
+  }
+
+  protected abstract void connectToServer();
 
   public abstract void sendMessage(Message message);
 
@@ -50,8 +65,8 @@ public abstract class MessageService {
         messageReceivedListener -> messageReceivedListener.onMessageReceived(message));
   }
 
-  protected boolean allSettingsAreValid() {
-    for(Setting setting : settings) {
+  private boolean allSettingsAreValid() {
+    for (Setting setting : settings) {
       if (!setting.valueIsValid()) {
         log.warn("Value " + setting.getValue() + " not valid for setting " + setting.getId());
         return false;
@@ -60,6 +75,8 @@ public abstract class MessageService {
 
     return true;
   }
+
+  public abstract boolean isConnected();
 
   public abstract String getUserName();
 }

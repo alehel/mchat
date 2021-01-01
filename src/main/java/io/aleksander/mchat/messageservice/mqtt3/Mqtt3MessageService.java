@@ -22,10 +22,10 @@ public class Mqtt3MessageService extends MessageService {
   private static final String SETTING_SERVER_URL = "SETTING_SERVER_URL";
   private static final String SETTING_CHAT_ROOM = "SETTING_CHAT_ROOM";
   private static final String SETTING_USER_NAME = "SETTING_USER_NAME";
-  private IMqttClient mqttClient;
   private final Setting serverUrl;
   private final Setting chatRoom;
   private final Setting userName;
+  private IMqttClient mqttClient;
 
   public Mqtt3MessageService() {
     super(MessageServiceType.MQQT3);
@@ -36,19 +36,7 @@ public class Mqtt3MessageService extends MessageService {
   }
 
   @Override
-  public void connect() {
-    if (mqttClient == null) {
-      if (allSettingsAreValid()) {
-        connectAndSubscribe();
-      } else {
-        throw new IllegalStateException("Not all settings are valid.");
-      }
-    } else {
-      log.info("Client already connected.");
-    }
-  }
-
-  private void connectAndSubscribe() {
+  public void connectToServer() {
     try {
       log.info(
           "Attempting to connect to room "
@@ -66,6 +54,7 @@ public class Mqtt3MessageService extends MessageService {
       log.info("Connected to chat room.");
     } catch (MqttException e) {
       log.warn("Error connecting. " + e.getMessage());
+      mqttClient = null;
     }
   }
 
@@ -95,6 +84,11 @@ public class Mqtt3MessageService extends MessageService {
   @Override
   public String getDisplayString() {
     return serverUrl.getValue() + "\n" + chatRoom.getValue();
+  }
+
+  @Override
+  public boolean isConnected() {
+    return mqttClient != null && mqttClient.isConnected();
   }
 
   @Override
