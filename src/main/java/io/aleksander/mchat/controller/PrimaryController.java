@@ -89,7 +89,7 @@ public class PrimaryController implements MessageReceivedListener {
         activeMessageService.connect();
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("Failed to show connection screen with message: " + e.getMessage());
     }
 
   }
