@@ -1,7 +1,5 @@
 package io.aleksander.mchat.messageservice;
 
-import io.aleksander.mchat.messageservice.mqtt3.Mqtt3MessageService;
-
 public class MessageServiceFactory {
   private MessageServiceFactory() {}
 

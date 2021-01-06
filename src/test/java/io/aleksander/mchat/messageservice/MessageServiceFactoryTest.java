@@ -1,6 +1,5 @@
 package io.aleksander.mchat.messageservice;
 
-import io.aleksander.mchat.messageservice.mqtt3.Mqtt3MessageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

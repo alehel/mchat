@@ -1,7 +1,5 @@
-package io.aleksander.mchat.messageservice.mqtt3;
+package io.aleksander.mchat.messageservice;
 
-import io.aleksander.mchat.messageservice.MessageService;
-import io.aleksander.mchat.messageservice.MessageServiceType;
 import io.aleksander.mchat.model.Message;
 import io.aleksander.mchat.model.RequiredFieldValidator;
 import io.aleksander.mchat.model.Setting;
@@ -17,7 +15,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 @Slf4j
-public class Mqtt3MessageService extends MessageService {
+class Mqtt3MessageService extends MessageService {
 
   private static final String SETTING_SERVER_URL = "SETTING_SERVER_URL";
   private static final String SETTING_CHAT_ROOM = "SETTING_CHAT_ROOM";
