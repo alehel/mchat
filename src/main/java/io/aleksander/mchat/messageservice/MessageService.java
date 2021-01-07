@@ -32,7 +32,7 @@ public abstract class MessageService {
       throw new IllegalStateException("Already connectedt.");
     }
 
-    if (allSettingsAreValid()) {
+    if (validateSettings().isEmpty()) {
       connectToServer();
     } else {
       throw new IllegalStateException("Not all settings are valid.");
@@ -65,15 +65,15 @@ public abstract class MessageService {
         messageReceivedListener -> messageReceivedListener.onMessageReceived(message));
   }
 
-  private boolean allSettingsAreValid() {
+  public List<String> validateSettings() {
+    List<String> validationMessages = new ArrayList<>();
     for (Setting setting : settings) {
       if (!setting.valueIsValid()) {
-        log.warn("Value " + setting.getValue() + " not valid for setting " + setting.getId());
-        return false;
+        validationMessages.add(setting.getValue() + " not valid for setting " + setting.getId());
       }
     }
 
-    return true;
+    return validationMessages;
   }
 
   public abstract boolean isConnected();
